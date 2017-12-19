@@ -24,3 +24,39 @@
 - shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
   args:
     chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get rolebindings -o yaml > {{ item }}-rolebindings.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get configmaps -o yaml > {{ item }}-configmaps.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get dc -o yaml > {{ item }}-dc.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get pvc -o yaml > {{ item }}-pvc.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get bc -o yaml > {{ item }}-bc.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get services -o yaml > {{ item }}-services.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get routes -o yaml > {{ item }}-routes.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- file: 
+    state: directory
+    recurse: yes
+    path: /home/ec2-user/ansible/project_backups
+    owner: ec2-user
+    group: ec2-user
+    mode: "0764"

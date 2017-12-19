@@ -1,8 +1,16 @@
 ---
 - hosts: master1.levvel.internal
+  vars_prompt:
+    - name: "oc_hostname"
+      prompt: "Enter your OC hostname:"
+    - name: "oc_user"
+      prompt: "Username:"
+    - name: "oc_password"
+      prompt: "Password:"
+
   tasks:
     - name: Login to OpenShift
-      command: oc login https://ec2-52-207-89-9.compute-1.amazonaws.com:8443 -u admin
+      command: bash -c "oc login {{oc_hostname}} -u {{oc_user}} -p {{oc_password}}"
 
     - name: Get the Project names
       command: bash -c "oc get project | awk '{print $1}' | sed 's/\(openshift\s*\|openshift-infra\s*\|management-infra\s*\|logging\s*\|default\s*\|kube-system\s*\|testing\s*\|is-test\s*\|NAME\)//g' | sed '/^$/d;s/[[:blank:]]//g'"

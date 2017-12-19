@@ -1,42 +1,40 @@
 ---
 - hosts: master1.levvel.internal
   tasks:
-   - name: Login to OpenShift
-     command: oc login https://ec2-52-207-89-9.compute-1.amazonaws.com:8443 -u admin 
-   
-   - name: Get the Project names          
-     command: bash -c "oc get project | awk '{print $1}' | sed 's/\(openshift\s*\|openshift-infra\s*\|management-infra\s*\|logging\s*\|default\s*\|kube-system\s*\|testing\s*\|is-test\s*\|NAME\)//g' | sed '/^$/d;s/[[:blank:]]//g'"
-     register: myoutput
-   
-   - debug:
-       msg: "{{myoutput}}"
-   
-     #file: path=/home/ec2-user/ansible/project_backups state=directory owner=ec2-user
-   - block:
-       - file: 
-           state: directory
-           path: "/home/ec2-user/ansible/project_backups/{{ item }}"  
-           owner: ec2-user
-           mode: "0744"
-         with_items: "{{ myoutput.stdout_lines }}"
+    - name: Login to OpenShift
+      command: oc login https://ec2-52-207-89-9.compute-1.amazonaws.com:8443 -u admin
 
-       - shell: oc project {{ item }}
-         args:
-           chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-         with_items: "{{ myoutput.stdout_lines }}"
+    - name: Get the Project names
+      command: bash -c "oc get project | awk '{print $1}' | sed 's/\(openshift\s*\|openshift-infra\s*\|management-infra\s*\|logging\s*\|default\s*\|kube-system\s*\|testing\s*\|is-test\s*\|NAME\)//g' | sed '/^$/d;s/[[:blank:]]//g'"
+      register: myoutput
 
-       - shell: oc get is -o yaml > {{ item }}-is.yaml
-         args:
-           chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-         with_items: "{{ myoutput.stdout_lines }}"
-      
-       - shell: oc get secrets -o yaml > {{ item }}-secrets.yaml
-         args:
-           chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-         with_items: "{{ myoutput.stdout_lines }}"
-      
-       - shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
-         args:
-           chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-         with_items: "{{ myoutput.stdout_lines }}"
+    - name: Test message
+      debug:
+        msg: "{{myoutput}}"
 
+    - file:
+        state: directory
+        path: "/home/ec2-user/ansible/project_backups/{{ item }}"
+        owner: ec2-user
+        mode: "0744"
+      with_items: "{{ myoutput.stdout_lines }}"
+
+    - shell: oc project {{ item }}
+      args:
+        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+      with_items: "{{ myoutput.stdout_lines }}"
+
+    - shell: oc get is -o yaml > {{ item }}-is.yaml
+      args:
+        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+      with_items: "{{ myoutput.stdout_lines }}"
+
+    - shell: oc get secrets -o yaml > {{ item }}-secrets.yaml
+      args:
+        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+      with_items: "{{ myoutput.stdout_lines }}"
+
+    - shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
+      args:
+        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+      with_items: "{{ myoutput.stdout_lines }}"

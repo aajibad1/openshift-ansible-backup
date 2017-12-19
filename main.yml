@@ -23,3 +23,6 @@
     - name: Iterate for project (replace name later)
       include: "./tasks/oc_backup.yml"
       with_items: "{{ myoutput.stdout_lines }}"
+    
+    - name: Creating a tar file
+      command: bash -c "tar -zcvf /tmp/project_backups_{{ansible_date_time.time}}.tar.gz /home/ec2-user/ansible/project_backups"  

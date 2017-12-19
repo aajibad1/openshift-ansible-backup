@@ -1,3 +1,26 @@
 ---
-- name: Test
-  debug: "test"
+- name: Echo item name {{ item }}
+  debug:
+    msg: "{{ item }}"
+
+- file:
+    state: directory
+    path: "/home/ec2-user/ansible/project_backups/{{ item }}"
+    owner: ec2-user
+    mode: "0744"
+
+- shell: oc project {{ item }}
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get is -o yaml > {{ item }}-is.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get secrets -o yaml > {{ item }}-secrets.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+
+- shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
+  args:
+    chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"

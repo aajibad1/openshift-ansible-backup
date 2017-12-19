@@ -12,29 +12,6 @@
       debug:
         msg: "{{myoutput}}"
 
-    - file:
-        state: directory
-        path: "/home/ec2-user/ansible/project_backups/{{ item }}"
-        owner: ec2-user
-        mode: "0744"
-      with_items: "{{ myoutput.stdout_lines }}"
-
-    - shell: oc project {{ item }}
-      args:
-        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-      with_items: "{{ myoutput.stdout_lines }}"
-
-    - shell: oc get is -o yaml > {{ item }}-is.yaml
-      args:
-        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-      with_items: "{{ myoutput.stdout_lines }}"
-
-    - shell: oc get secrets -o yaml > {{ item }}-secrets.yaml
-      args:
-        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
-      with_items: "{{ myoutput.stdout_lines }}"
-
-    - shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
-      args:
-        chdir: "/home/ec2-user/ansible/project_backups/{{ item }}"
+    - name: Iterate for project (replace name later)
+      include_tasks: tasks/oc_backup.yml
       with_items: "{{ myoutput.stdout_lines }}"

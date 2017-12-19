@@ -13,5 +13,5 @@
         msg: "{{myoutput}}"
 
     - name: Iterate for project (replace name later)
-      include_tasks: tasks/oc_backup.yml
+      include: "./tasks/oc_backup.yml"
       with_items: "{{ myoutput.stdout_lines }}"

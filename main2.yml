@@ -1,0 +1,16 @@
+---
+- hosts: master1.levvel.internal
+  tasks:
+   - name: Login to OpenShift
+     command: oc login https://ec2-52-207-89-9.compute-1.amazonaws.com:8443 -u admin 
+   
+   - name: Get the Project names          
+     command: bash -c "oc get project | awk '{print $1}' | sed 's/\(openshift\s*\|openshift-infra\s*\|management-infra\s*\|logging\s*\|default\s*\|kube-system\s*\|testing\s*\|is-test\s*\|NAME\)//g' | sed '/^$/d;s/[[:blank:]]//g'"
+     register: myoutput
+   
+   - debug:
+       msg: "{{myoutput.stdout_lines}}"
+   
+   - name: Create backup directory with project sub dirs
+     file: 
+       path=/home/ec2-user/ansible/project_backups state=directory owner=ec2-user

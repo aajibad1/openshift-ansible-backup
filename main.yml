@@ -25,5 +25,5 @@
       with_items: "{{ myoutput.stdout_lines }}"
     
     - name: Creating a tar file
-      command: bash -c "tar -zcvf /tmp/project_backups_{{ansible_date_time.date}}_{{ansible_date_time.second}}.tar.gz project_backups --owner=ec2-user --group=ec2-user"  
+      command: bash -c "tar -zcvf /tmp/project_backups_{{ansible_date_time.date}}_{{1000 | random }}.tar.gz project_backups --owner=ec2-user --group=ec2-user"  
         

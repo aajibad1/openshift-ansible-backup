@@ -9,47 +9,58 @@
     owner: ec2-user
     mode: "0744"
 
-- shell: oc project {{ item }}
+- name: Change project
+  shell: oc project {{ item }}
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get is -o yaml > {{ item }}-is.yaml
+- name: Backup Image-streams
+  shell: oc get is -o yaml > {{ item }}-is.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get secrets -o yaml > {{ item }}-secrets.yaml
+- name: Backup Secrets
+  shell: oc get secrets -o yaml > {{ item }}-secrets.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
+- name: Backup Serviceaccounts
+  shell: oc get serviceaccount -o yaml > {{ item }}-serviceaccounts.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get rolebindings -o yaml > {{ item }}-rolebindings.yaml
+- name: Backup Role-bindings
+  shell: oc get rolebindings -o yaml > {{ item }}-rolebindings.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get configmaps -o yaml > {{ item }}-configmaps.yaml
+- name: Backup Config-maps
+  shell: oc get configmaps -o yaml > {{ item }}-configmaps.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get dc -o yaml > {{ item }}-dc.yaml
+- name: Backup Deployment configs
+  shell: oc get dc -o yaml > {{ item }}-dc.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get pvc -o yaml > {{ item }}-pvc.yaml
+- name: Backup Persistent voulme claims
+  shell: oc get pvc -o yaml > {{ item }}-pvc.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get bc -o yaml > {{ item }}-bc.yaml
+- name: Backup Build configs
+  shell: oc get bc -o yaml > {{ item }}-bc.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get services -o yaml > {{ item }}-services.yaml
+- name: Backup Services
+  shell: oc get services -o yaml > {{ item }}-services.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
-- shell: oc get routes -o yaml > {{ item }}-routes.yaml
+- name: Backup Routes
+  shell: oc get routes -o yaml > {{ item }}-routes.yaml
   args:
     chdir: "/home/ec2-user/project_backups/{{ item }}"
 
